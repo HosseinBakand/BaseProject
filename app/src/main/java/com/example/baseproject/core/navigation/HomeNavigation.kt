@@ -5,30 +5,29 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.baseproject.ui.screens.home.HomeScreen
+import com.example.baseproject.ui.screens.temp.TempScreen
 
 object HomeDestination : BaseProjectDestination {
-    const val marketIdArg = "chapterId"
+    override val route: String = "home"
 
-    override val route: String = "car-list/{$marketIdArg}"
+}
 
-    fun createNavigationRoute(marketIdArg: String): String {
-        return "car-list/$marketIdArg"
-    }
+object TempDestination : BaseProjectDestination {
+    override val route: String = "temp"
 }
 
 fun NavGraphBuilder.carListGraph(navController: NavController) {
-    composable(route = HomeDestination.route,
-        arguments = listOf(
-            navArgument(HomeDestination.marketIdArg) { type = NavType.StringType }
-        )
+    composable(
+        route = HomeDestination.route,
     ) {
-//        CarListScreen(
-//            onBackClick = {
-//                navController.navigateUp()
-//            },
-//            onCarClick = {
-//
-//            }
-//        )
+        HomeScreen(){
+            navController.navigate(TempDestination.route)
+        }
+    }
+    composable(
+        route = TempDestination.route,
+    ) {
+        TempScreen()
     }
 }
