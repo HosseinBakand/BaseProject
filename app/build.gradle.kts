@@ -76,4 +76,15 @@ dependencies {
     implementation(Libraries.Hilt)
     implementation(Libraries.HiltNavigation)
     kapt(Libraries.HiltCompiler)
+
+    //Retrofit
+    implementation(Libraries.Retrofit)
+    implementation(Libraries.RetrofitKotlinSerialization)
+    implementation(Libraries.OkhttpLogging)
+
+    //Room
+    implementation(Libraries.RoomKtx)
+    implementation(Libraries.RoomRuntime)
+    implementation(Libraries.Serialization)
+    kapt(Libraries.RoomCompiler)
 }

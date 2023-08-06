@@ -1,4 +1,4 @@
-package com.example.baseproject.core.navigation
+package com.example.baseproject.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
