@@ -41,7 +41,7 @@ val previewProducts = listOf(
         price = Price(0.0, "$$"),
     ),
     Product(
-        id = 1,
+        id = 2,
         name = "Name2",
         isFavorite = true,
         imageUrl = "https://kredit.check24.de/konto-kredit/ratenkredit/nativeapps/imgs/01.png",
@@ -53,7 +53,7 @@ val previewProducts = listOf(
         price = Price(0.0, "$$"),
     ),
     Product(
-        id = 1,
+        id = 3,
         name = "Name2",
         isFavorite = true,
         imageUrl = "https://kredit.check24.de/konto-kredit/ratenkredit/nativeapps/imgs/01.png",
@@ -65,7 +65,7 @@ val previewProducts = listOf(
         price = Price(0.0, "$$"),
     ),
     Product(
-        id = 1,
+        id = 4,
         name = "Name2",
         isFavorite = true,
         imageUrl = "https://kredit.check24.de/konto-kredit/ratenkredit/nativeapps/imgs/01.png",
@@ -77,7 +77,7 @@ val previewProducts = listOf(
         price = Price(0.0, "$$"),
     ),
     Product(
-        id = 1,
+        id = 5,
         name = "Name2",
         isFavorite = true,
         imageUrl = "https://kredit.check24.de/konto-kredit/ratenkredit/nativeapps/imgs/01.png",

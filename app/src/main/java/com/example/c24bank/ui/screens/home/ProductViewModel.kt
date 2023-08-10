@@ -1,18 +1,17 @@
 package com.example.c24bank.ui.screens.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.c24bank.data.repositories.ProductRepository
 import com.example.c24bank.domain.model.Filter
+import com.example.c24bank.domain.model.NetworkRequestState
 import com.example.c24bank.domain.model.Product
+import com.example.c24bank.domain.repositories.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,7 +24,8 @@ class ProductViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _filterState = MutableStateFlow(Filter.ALL)
-    private val _loadingState = MutableStateFlow(false)
+    private val _loadingState: MutableStateFlow<NetworkRequestState> =
+        MutableStateFlow(NetworkRequestState.Loading)
 
     val uiState: StateFlow<ProductUiState> =
         combine(
@@ -33,14 +33,14 @@ class ProductViewModel @Inject constructor(
             _filterState,
             _loadingState
         ) { products, filter, isLoading ->
-            val filteredProducts = when(filter){
+            val filteredProducts = when (filter) {
                 Filter.ALL -> products
                 Filter.AVAILABLE -> products.filter { it.isAvailable }
                 Filter.FAVORITE -> products.filter { it.isFavorite }
             }
             ProductUiState(
                 products = filteredProducts,
-                isLoading = isLoading,
+                requestState = isLoading,
                 filter = filter
             )
         }.stateIn(
@@ -54,11 +54,12 @@ class ProductViewModel @Inject constructor(
         fetchData()
     }
 
-    fun fetchData(){
+    fun fetchData() {
         viewModelScope.launch {
-            _loadingState.update { true }
-            productRepository.getProducts()
-            _loadingState.update { false }
+            _loadingState.update { NetworkRequestState.Loading }
+            productRepository.getProducts().let { result ->
+                _loadingState.update { result }
+            }
         }
     }
 
@@ -68,7 +69,10 @@ class ProductViewModel @Inject constructor(
 }
 
 data class ProductUiState(
-    val products : List<Product> = emptyList(),
-    val isLoading : Boolean = false,
+    val products: List<Product> = emptyList(),
+    val requestState: NetworkRequestState = NetworkRequestState.Loading,
     val filter: Filter = Filter.ALL
-)
+) {
+    val isLoading: Boolean
+        get() = requestState == NetworkRequestState.Loading
+}

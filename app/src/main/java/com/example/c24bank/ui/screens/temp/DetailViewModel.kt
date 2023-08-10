@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.c24bank.data.repositories.ProductRepository
 import com.example.c24bank.domain.model.Product
+import com.example.c24bank.domain.repositories.ProductRepository
 import com.example.c24bank.ui.navigation.DetailDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -34,8 +34,6 @@ class DetailViewModel @Inject constructor(
 
     init {
         if (productId != -1) {
-
-            Log.e("TAGTAG", productId.toString())
             getProduct(productId)
         } else {
             //TODO show ERROR

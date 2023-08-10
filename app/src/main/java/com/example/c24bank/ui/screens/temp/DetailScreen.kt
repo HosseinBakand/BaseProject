@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -57,7 +58,7 @@ fun DetailScreen(uiState: DetailUiState, onFavoriteClick: () -> Unit) {
             ) {
                 AsyncImage(
                     modifier = Modifier
-                        .height(125.dp)
+                        .size(125.dp)
                         .padding(8.dp),
                     model = uiState.product.imageUrl,
                     contentDescription = null,
@@ -129,7 +130,9 @@ fun DetailScreen(uiState: DetailUiState, onFavoriteClick: () -> Unit) {
 private fun Preview() {
     C24BankTheme {
         Scaffold { _ ->
-//            DetailScreen(uiState = DetailUiState(product = previewProducts.first()))
+            DetailScreen(uiState = DetailUiState(product = previewProducts.first())) {
+
+            }
         }
     }
 }
