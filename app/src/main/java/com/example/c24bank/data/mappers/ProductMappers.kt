@@ -46,6 +46,20 @@ fun ProductEntity.toModel() = Product(
     price = Price(priceValue, priceCurrency),
 )
 
+fun Product.toEntity() = ProductEntity(
+    id = id,
+    name = name,
+    shortDescription = shortDescription,
+    isFavorite = isFavorite,
+    imageUrl = imageUrl,
+    isAvailable = isAvailable,
+    releaseDate = releaseDate,
+    longDescription = longDescription,
+    rating = rating,
+    priceValue = price.value,
+    priceCurrency = price.currency,
+)
+
 fun PriceResponse.toModel() = Price(
     value = value ?: 0.0,
     currency = currency ?: "N/A"

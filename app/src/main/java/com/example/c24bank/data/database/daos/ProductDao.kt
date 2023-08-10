@@ -13,7 +13,7 @@ interface ProductDao {
     fun getProducts(): Flow<List<ProductEntity>>
     @Query("SELECT * FROM product WHERE id = :productId")
     fun getProduct(productId:Int): Flow<ProductEntity>
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProduct(entity: ProductEntity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)//TODO upsert

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -41,11 +42,23 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    fun getProduct(productId: Int) {
+    private fun getProduct(productId: Int) {
         productObserverJob?.cancel()
         productObserverJob = productRepository.getProduct(productId).onEach { product ->
             _uiState.update { it.copy(product = product) }
         }.launchIn(viewModelScope)
+    }
+
+    fun toggleFavorite() {
+        viewModelScope.launch {
+            uiState.value.product?.let { product ->
+                if (product.isFavorite) {
+                    productRepository.deleteFavorite(productId)
+                } else {
+                    productRepository.addFavorite(productId)
+                }
+            }
+        }
 
     }
 }

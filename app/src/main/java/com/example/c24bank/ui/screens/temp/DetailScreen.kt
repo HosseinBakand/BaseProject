@@ -1,6 +1,8 @@
 package com.example.c24bank.ui.screens.temp
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,11 +32,11 @@ import com.example.c24bank.ui.theme.C24BankTheme
 fun DetailScreen(viewModel: DetailViewModel = hiltViewModel()) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    DetailScreen(uiState)
+    DetailScreen(uiState, onFavoriteClick = viewModel::toggleFavorite)
 }
 
 @Composable
-fun DetailScreen(uiState: DetailUiState) {
+fun DetailScreen(uiState: DetailUiState, onFavoriteClick: () -> Unit) {
     if (uiState.product != null) {
 
         Column(
@@ -60,10 +62,15 @@ fun DetailScreen(uiState: DetailUiState) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    val textColor by
+                    animateColorAsState(
+                        targetValue = if (uiState.product.isFavorite) Color.Blue
+                        else Color.Black
+                    )
                     Text(
                         text = uiState.product.name,
                         style = MaterialTheme.typography.titleMedium,
-                        color = if (uiState.product.isFavorite) Color.Blue else Color.Black
+                        color = textColor
                     )
                     Text(
                         text = "${uiState.product.price}",
@@ -89,7 +96,9 @@ fun DetailScreen(uiState: DetailUiState) {
             )
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { /*TODO*/ }) {
+                onClick = onFavoriteClick
+            ) {
+//                TODO AnimatedContent
                 Text(
                     text = if (uiState.product.isFavorite) "Vergessen" else "Vormerken",
                     style = MaterialTheme.typography.bodyMedium
@@ -102,7 +111,10 @@ fun DetailScreen(uiState: DetailUiState) {
             )
         }
     } else {
-        //TODO SHOW STH
+        Text(
+            text = "Loading...",
+            style = MaterialTheme.typography.displayMedium
+        )
     }
 }
 
@@ -112,7 +124,7 @@ fun DetailScreen(uiState: DetailUiState) {
 private fun Preview() {
     C24BankTheme {
         Scaffold { _ ->
-            DetailScreen(uiState = DetailUiState(product = previewProducts.first()))
+//            DetailScreen(uiState = DetailUiState(product = previewProducts.first()))
         }
     }
 }

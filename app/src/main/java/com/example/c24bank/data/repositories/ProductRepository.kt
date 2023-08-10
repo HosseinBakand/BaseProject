@@ -9,6 +9,7 @@ import com.example.c24bank.data.mappers.toEntity
 import com.example.c24bank.data.mappers.toModel
 import com.example.c24bank.domain.model.Product
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
@@ -16,8 +17,10 @@ import kotlin.coroutines.cancellation.CancellationException
 interface ProductRepository {
 
     val products: Flow<List<Product>>
-    suspend fun getProducts()
     fun getProduct(productId: Int): Flow<Product>
+    suspend fun getProducts()
+    suspend fun addFavorite(productId: Int)
+    suspend fun deleteFavorite(productId: Int)
 }
 
 class ProductRepositoryImpl @Inject constructor(
@@ -38,6 +41,16 @@ class ProductRepositoryImpl @Inject constructor(
         } catch (exception: Exception) {
             //todo
         }
+    }
+
+    override suspend fun addFavorite(productId: Int) {
+        val product = getProduct(productId).first().copy(isFavorite = true)
+        productDao.insertProduct(product.toEntity())
+    }
+
+    override suspend fun deleteFavorite(productId: Int) {
+        val product = getProduct(productId).first().copy(isFavorite = false)
+        productDao.insertProduct(product.toEntity())
     }
 
     override fun getProduct(productId: Int): Flow<Product> {
