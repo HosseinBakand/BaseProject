@@ -19,9 +19,6 @@ import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-private const val BaseUrl =
-    "https://www.google.com/"//BuildConfig.BACKEND_URL
-
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -71,7 +68,7 @@ object NetworkModule {
         converterFactory: Converter.Factory
     ): AppNetworkApi {
         return Retrofit.Builder()
-            .baseUrl(BaseUrl)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .build()

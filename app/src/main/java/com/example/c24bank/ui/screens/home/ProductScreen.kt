@@ -13,19 +13,24 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.c24bank.domain.model.Product
 import com.example.c24bank.ui.theme.C24BankTheme
 
 @Composable
 fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navigateToB: () -> Unit) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     ProductScreen(
-        uiState = ProductUiState(listOf("", "", "", "", ""))
+        uiState = uiState
     ){
         navigateToB()
     }
@@ -45,9 +50,7 @@ fun ProductScreen(uiState: ProductUiState, onItemClick : (Int)->Unit) {
         ) {
             items(items = uiState.products) {
                 ProductComponent(
-                    product = Product(
-                        1,"asdasd", "asdasd", false
-                    )
+                    product = it
                 ) {
                     onItemClick(1)
                 }
@@ -74,10 +77,10 @@ fun ProductComponent(product: Product, onClick: () -> Unit) {
             .clickable(onClick = onClick)
             .padding(8.dp)
     ) {
-        Text(text = "Name")
-        Text(text = "Description")
-        Text(text = "Price")
-        Text(text = "Rating")
+        Text(text = product.name)
+        Text(text = product.shortDescription)
+        Text(text = product.price.toString())
+        Text(text = product.rating.toString())
     }
 }
 
@@ -85,12 +88,6 @@ fun ProductComponent(product: Product, onClick: () -> Unit) {
 @Composable
 fun GreetingPreview() {
     C24BankTheme {
-        ProductComponent(
-            product = Product(
-                1,"asdasd", "asdasd", false
-            )
-        ) {
 
-        }
     }
 }

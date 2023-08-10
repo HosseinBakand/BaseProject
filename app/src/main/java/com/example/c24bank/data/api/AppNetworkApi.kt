@@ -1,11 +1,12 @@
 package com.example.c24bank.data.api
 
-import retrofit2.http.POST
+import com.example.c24bank.data.api.model.ProductsNetworkResponse
+import retrofit2.http.GET
 
 interface AppNetworkApi {
 
-    @POST(value = "markets")
-    suspend fun getMarkets()
+    @GET(value = "products-test.json")
+    suspend fun getProducts() : ProductsNetworkResponse
 }
 
 
