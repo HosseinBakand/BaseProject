@@ -23,6 +23,7 @@ object Versions {
     const val serialization = "1.5.0"
     const val okhttp = "4.10.0"
     const val retrofitKotlinxSerializationJson = "1.0.0"
+    const val coil = "2.2.2"
 
     // TestLibraries
     const val junit = "4.13.2"
@@ -85,6 +86,11 @@ object Libraries {
     const val OkhttpLogging = "com.squareup.okhttp3:logging-interceptor:${Versions.okhttp}"
     const val Serialization =
         "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.serialization}"
+
+
+    const val Coil = "io.coil-kt:coil:${Versions.coil}"
+    const val CoilCompose = "io.coil-kt:coil-compose:${Versions.coil}"
+    const val CoilSvg = "io.coil-kt:coil-svg:${Versions.coil}"
 }
 
 object TestLibraries {

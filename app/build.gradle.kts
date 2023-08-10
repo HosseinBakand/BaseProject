@@ -87,4 +87,9 @@ dependencies {
     implementation(Libraries.RoomRuntime)
     implementation(Libraries.Serialization)
     kapt(Libraries.RoomCompiler)
+
+    //coil
+    implementation(Libraries.Coil)
+    implementation(Libraries.CoilCompose)
+    implementation(Libraries.CoilSvg)
 }
