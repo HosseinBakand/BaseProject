@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.ScrollableTabRow
@@ -39,32 +43,33 @@ import com.example.c24bank.ui.components.RatingComponent
 @Composable
 fun ProductListScreen(
     viewModel: ProductViewModel = hiltViewModel(),
-    navigateToDetail: (productId : Int) -> Unit) {
+    navigateToDetail: (productId: Int) -> Unit
+) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val filterState by viewModel.filterState.collectAsStateWithLifecycle()
 
     ProductListScreen(
         uiState = uiState,
-        filter = filterState,
         onFilterClick = viewModel::filterList,
-        onItemClick = navigateToDetail
+        onItemClick = navigateToDetail,
+        onRefreshRequest = viewModel::fetchData
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ProductListScreen(
     uiState: ProductUiState,
-    filter: Filter,
+    onRefreshRequest: () -> Unit,
     onFilterClick: (Filter) -> Unit,
     onItemClick: (Int) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         val filters = remember { Filter.values() }
-        MBTabRow(selectedTabIndex = Filter.values().indexOf(filter)) {
+        MBTabRow(selectedTabIndex = Filter.values().indexOf(uiState.filter)) {
             filters.forEach {
                 MBTab(
-                    selected = it == filter,
+                    selected = it == uiState.filter,
                     onClick = { onFilterClick(it) },
                     text = { Text(text = it.text) },
                 )
@@ -74,19 +79,34 @@ fun ProductListScreen(
         Text(text = "Title....")
         Text(text = "Subtitle...")
 
-        LazyColumn(
+        val pullRefreshState = rememberPullRefreshState(uiState.isLoading, onRefreshRequest)
+
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(weight = 1f)
+                .pullRefresh(pullRefreshState)
         ) {
-            items(items = uiState.products) {
-                ProductComponent(
-                    product = it
-                ) {
-                    onItemClick(it.id)
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pullRefresh(pullRefreshState)
+            ) {
+                items(items = uiState.products) {
+                    ProductComponent(
+                        product = it
+                    ) {
+                        onItemClick(it.id)
+                    }
                 }
             }
+            PullRefreshIndicator(
+                uiState.isLoading,
+                pullRefreshState,
+                Modifier.align(Alignment.TopCenter)
+            )
         }
+
     }
 }
 

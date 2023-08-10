@@ -21,25 +21,27 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductViewModel @Inject constructor(
-    productRepository: ProductRepository
+    private val productRepository: ProductRepository
 ) : ViewModel() {
 
     private val _filterState = MutableStateFlow(Filter.ALL)
-    val filterState: StateFlow<Filter>
-        get() = _filterState
+    private val _loadingState = MutableStateFlow(false)
 
     val uiState: StateFlow<ProductUiState> =
         combine(
             productRepository.products,
-            filterState
-        ) { products, filter ->
+            _filterState,
+            _loadingState
+        ) { products, filter, isLoading ->
             val filteredProducts = when(filter){
                 Filter.ALL -> products
                 Filter.AVAILABLE -> products.filter { it.isAvailable }
                 Filter.FAVORITE -> products.filter { it.isFavorite }
             }
             ProductUiState(
-                products = filteredProducts
+                products = filteredProducts,
+                isLoading = isLoading,
+                filter = filter
             )
         }.stateIn(
             viewModelScope,
@@ -47,9 +49,16 @@ class ProductViewModel @Inject constructor(
             initialValue = ProductUiState()
         )
 
+
     init {
+        fetchData()
+    }
+
+    fun fetchData(){
         viewModelScope.launch {
+            _loadingState.update { true }
             productRepository.getProducts()
+            _loadingState.update { false }
         }
     }
 
@@ -59,5 +68,7 @@ class ProductViewModel @Inject constructor(
 }
 
 data class ProductUiState(
-    val products : List<Product> = emptyList()
+    val products : List<Product> = emptyList(),
+    val isLoading : Boolean = false,
+    val filter: Filter = Filter.ALL
 )
