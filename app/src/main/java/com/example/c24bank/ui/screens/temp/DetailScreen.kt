@@ -2,6 +2,7 @@ package com.example.c24bank.ui.screens.temp
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.horizontalScroll
@@ -40,6 +41,7 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel()) {
     DetailScreen(uiState, onFavoriteClick = viewModel::toggleFavorite)
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun DetailScreen(uiState: DetailUiState, onFavoriteClick: () -> Unit) {
     if (uiState.product != null) {
@@ -68,8 +70,7 @@ fun DetailScreen(uiState: DetailUiState, onFavoriteClick: () -> Unit) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    val textColor by
-                    animateColorAsState(
+                    val textColor by animateColorAsState(
                         targetValue = if (uiState.product.isFavorite) Color.Blue
                         else Color.Black
                     )
@@ -97,29 +98,28 @@ fun DetailScreen(uiState: DetailUiState, onFavoriteClick: () -> Unit) {
             }
 
             Text(
-                text = uiState.product.shortDescription,
-                style = MaterialTheme.typography.bodyMedium
+                text = uiState.product.shortDescription, style = MaterialTheme.typography.bodyMedium
             )
             Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onFavoriteClick
+                modifier = Modifier.fillMaxWidth(), onClick = onFavoriteClick
             ) {
-//                TODO AnimatedContent
-                Text(
-                    text = if (uiState.product.isFavorite) "Vergessen" else "Vormerken",
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                AnimatedContent(
+                    targetState = if (uiState.product.isFavorite) "Vergessen" else "Vormerken"
+                ) { target ->
+                    // Make sure to use `targetCount`, not `count`.
+                    Text(
+                        text = target, style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
 
             Text(
-                text = uiState.product.longDescription,
-                style = MaterialTheme.typography.bodyMedium
+                text = uiState.product.longDescription, style = MaterialTheme.typography.bodyMedium
             )
         }
     } else {
         Text(
-            text = "Loading...",
-            style = MaterialTheme.typography.displayMedium
+            text = "Loading...", style = MaterialTheme.typography.displayMedium
         )
     }
 }

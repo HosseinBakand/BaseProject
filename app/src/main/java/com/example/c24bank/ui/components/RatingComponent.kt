@@ -9,8 +9,12 @@ import com.example.c24bank.R
 import kotlin.math.floor
 
 @Composable
-fun RatingComponent(rating: Float){//todo setMax
-    val count = floor(rating / 0.5f)
+fun RatingComponent(rating: Float) {
+    val finalRate = if (rating > 5.0) 5f
+    else if (rating < 0.0) 0f
+    else rating
+
+    val count = floor(finalRate / 0.5f)
 
     val fullStarCount = floor(count / 2).toInt()
     val iaHalfExist = count.toInt() % 2 == 1
