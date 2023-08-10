@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 fun AppNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    startDestination: String = HomeDestination.route
+    startDestination: String = ProductListDestination.route
 ) {
     NavHost(
         navController = navController,

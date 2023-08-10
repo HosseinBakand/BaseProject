@@ -3,6 +3,8 @@ package com.example.c24bank.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.c24bank.data.repositories.ProductRepository
+import com.example.c24bank.domain.model.Filter
+import com.example.c24bank.domain.model.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -56,8 +58,6 @@ class ProductViewModel @Inject constructor(
     }
 }
 
-enum class Filter(val text: String) {
-    ALL("Alle"),
-    AVAILABLE("Verfügbar"),
-    FAVORITE("Vorgemerkt"),
-}
+data class ProductUiState(
+    val products : List<Product> = emptyList()
+)

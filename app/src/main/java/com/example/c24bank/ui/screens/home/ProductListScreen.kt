@@ -32,26 +32,28 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.example.c24bank.domain.model.Filter
 import com.example.c24bank.domain.model.Product
 import com.example.c24bank.ui.components.RatingComponent
 
 @Composable
-fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navigateToB: () -> Unit) {
+fun ProductListScreen(
+    viewModel: ProductViewModel = hiltViewModel(),
+    navigateToDetail: (productId : Int) -> Unit) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val filterState by viewModel.filterState.collectAsStateWithLifecycle()
 
-    ProductScreen(
+    ProductListScreen(
         uiState = uiState,
         filter = filterState,
-        onFilterClick = viewModel::filterList
-    ) {
-        navigateToB()
-    }
+        onFilterClick = viewModel::filterList,
+        onItemClick = navigateToDetail
+    )
 }
 
 @Composable
-fun ProductScreen(
+fun ProductListScreen(
     uiState: ProductUiState,
     filter: Filter,
     onFilterClick: (Filter) -> Unit,
@@ -81,7 +83,7 @@ fun ProductScreen(
                 ProductComponent(
                     product = it
                 ) {
-                    onItemClick(1)
+                    onItemClick(it.id)
                 }
             }
         }

@@ -17,6 +17,7 @@ interface ProductRepository {
 
     val products: Flow<List<Product>>
     suspend fun getProducts()
+    fun getProduct(productId: Int): Flow<Product>
 }
 
 class ProductRepositoryImpl @Inject constructor(
@@ -29,7 +30,6 @@ class ProductRepositoryImpl @Inject constructor(
     override suspend fun getProducts() {
         try {
             val products = remoteDataSource.getProducts().map(ProductResponse::toEntity)
-            Log.e("TAGTAG",products.toString())
             productDao.insertProducts(products)
 
         } catch (cancellationException: CancellationException) {
@@ -38,6 +38,10 @@ class ProductRepositoryImpl @Inject constructor(
         } catch (exception: Exception) {
             //todo
         }
+    }
+
+    override fun getProduct(productId: Int): Flow<Product> {
+        return productDao.getProduct(productId).map(ProductEntity::toModel)
     }
 
 }

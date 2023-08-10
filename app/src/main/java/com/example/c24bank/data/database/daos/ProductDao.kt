@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.Flow
 interface ProductDao {
     @Query("SELECT * FROM product")
     fun getProducts(): Flow<List<ProductEntity>>
+    @Query("SELECT * FROM product WHERE id = :productId")
+    fun getProduct(productId:Int): Flow<ProductEntity>
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertProduct(entity: ProductEntity)
 
