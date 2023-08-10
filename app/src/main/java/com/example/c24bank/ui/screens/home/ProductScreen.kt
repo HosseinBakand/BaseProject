@@ -39,11 +39,12 @@ import com.example.c24bank.ui.components.RatingComponent
 fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navigateToB: () -> Unit) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val filterState by viewModel.filterState.collectAsStateWithLifecycle()
 
     ProductScreen(
         uiState = uiState,
-        filter = Filter.ALL,
-        onFilterClick = {}
+        filter = filterState,
+        onFilterClick = viewModel::filterList
     ) {
         navigateToB()
     }
