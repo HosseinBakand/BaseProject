@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class ProductViewModel @Inject constructor(
     sampleRepository: SampleRepository
 ) : ViewModel() {
     init{

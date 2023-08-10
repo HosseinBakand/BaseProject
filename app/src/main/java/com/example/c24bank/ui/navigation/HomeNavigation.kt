@@ -3,8 +3,8 @@ package com.example.c24bank.ui.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.c24bank.ui.screens.home.HomeScreen
-import com.example.c24bank.ui.screens.temp.TempScreen
+import com.example.c24bank.ui.screens.home.ProductScreen
+import com.example.c24bank.ui.screens.temp.DetailScreen
 
 object HomeDestination : C24BankDestination {
     override val route: String = "home"
@@ -19,13 +19,13 @@ fun NavGraphBuilder.carListGraph(navController: NavController) {
     composable(
         route = HomeDestination.route,
     ) {
-        HomeScreen(){
+        ProductScreen(){
             navController.navigate(TempDestination.route)
         }
     }
     composable(
         route = TempDestination.route,
     ) {
-        TempScreen()
+        DetailScreen()
     }
 }
