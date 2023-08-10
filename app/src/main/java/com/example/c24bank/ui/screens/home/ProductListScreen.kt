@@ -1,5 +1,6 @@
 package com.example.c24bank.ui.screens.home
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -7,10 +8,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
@@ -19,6 +22,7 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
@@ -26,24 +30,27 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.c24bank.domain.model.Filter
 import com.example.c24bank.domain.model.Product
+import com.example.c24bank.domain.model.previewProducts
 import com.example.c24bank.ui.components.RatingComponent
+import com.example.c24bank.ui.theme.C24BankTheme
 
 @Composable
 fun ProductListScreen(
-    viewModel: ProductViewModel = hiltViewModel(),
-    navigateToDetail: (productId: Int) -> Unit
+    viewModel: ProductViewModel = hiltViewModel(), navigateToDetail: (productId: Int) -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -76,8 +83,8 @@ fun ProductListScreen(
             }
         }
 
-        Text(text = "Title....")
-        Text(text = "Subtitle...")
+        Text(text = "Check24 Shape Compararison")
+        Text(text = "List of geometric products")
 
         val pullRefreshState = rememberPullRefreshState(uiState.isLoading, onRefreshRequest)
 
@@ -92,18 +99,18 @@ fun ProductListScreen(
                     .fillMaxSize()
                     .pullRefresh(pullRefreshState)
             ) {
-                items(items = uiState.products) {
+
+                items(items = uiState.products, key = { it.id }) {
                     ProductComponent(
                         product = it
                     ) {
                         onItemClick(it.id)
                     }
+
                 }
             }
             PullRefreshIndicator(
-                uiState.isLoading,
-                pullRefreshState,
-                Modifier.align(Alignment.TopCenter)
+                uiState.isLoading, pullRefreshState, Modifier.align(Alignment.TopCenter)
             )
         }
 
@@ -123,22 +130,21 @@ fun ProductComponent(product: Product, onClick: () -> Unit) {
             )
             .background(
                 if (product.isFavorite) Color(0xFFD1C4E9)
-                else MaterialTheme.colorScheme.background,
-                shape = MaterialTheme.shapes.large
+                else MaterialTheme.colorScheme.background, shape = MaterialTheme.shapes.large
             )
             .clip(shape = MaterialTheme.shapes.large)
             .clickable(onClick = onClick)
-            .padding(horizontal = 8.dp, vertical = 16.dp),
+            .padding(horizontal = 8.dp, vertical = 16.dp)
+            .wrapContentHeight(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
 
     ) {
         if (product.isAvailable) {
             AsyncImage(
-                modifier = Modifier.height(75.dp),
+                modifier = Modifier.height(75.dp).aspectRatio(1f),
                 model = product.imageUrl,
                 contentDescription = null,
-                alignment = Alignment.CenterEnd,
             )
         }
         Column(
@@ -164,8 +170,7 @@ fun ProductComponent(product: Product, onClick: () -> Unit) {
                 }
             }
             Text(
-                text = product.shortDescription,
-                style = MaterialTheme.typography.bodySmall
+                text = product.shortDescription, style = MaterialTheme.typography.bodySmall
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -174,8 +179,7 @@ fun ProductComponent(product: Product, onClick: () -> Unit) {
             ) {
                 if (product.isAvailable) {
                     Text(
-                        text = "${product.price}",
-                        style = MaterialTheme.typography.bodySmall
+                        text = "${product.price}", style = MaterialTheme.typography.bodySmall
                     )
                 }
                 RatingComponent(rating = product.rating.toFloat())
@@ -183,10 +187,9 @@ fun ProductComponent(product: Product, onClick: () -> Unit) {
         }
         if (!product.isAvailable) {
             AsyncImage(
-                modifier = Modifier.height(75.dp),
+                modifier = Modifier.height(75.dp).aspectRatio(1f),
                 model = product.imageUrl,
                 contentDescription = null,
-                alignment = Alignment.CenterEnd,
             )
         }
     }
@@ -242,3 +245,16 @@ fun MBTabRow(
     )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Preview
+@Composable
+private fun Preview() {
+    C24BankTheme {
+        Scaffold { _ ->
+            ProductComponent(product = previewProducts.get(0)){
+
+            }
+//            DetailScreen(uiState = DetailUiState(product = previewProducts.first()))
+        }
+    }
+}

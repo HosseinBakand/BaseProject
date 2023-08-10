@@ -15,7 +15,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.navigation.compose.rememberNavController
+import com.example.c24bank.ui.components.NiaTopAppBar
 import com.example.c24bank.ui.components.PrivacyComponent
 import com.example.c24bank.ui.navigation.AppNavHost
 import com.example.c24bank.ui.theme.C24BankTheme
@@ -38,6 +40,8 @@ fun ComposeApp() {
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
                 PrivacyComponent()
+            },
+            topBar = {
             }
         ) { padding ->
             Box(
