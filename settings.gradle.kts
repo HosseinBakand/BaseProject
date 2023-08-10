@@ -12,6 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "BaseProject"
+rootProject.name = "C24Bank"
 
 include(":app")

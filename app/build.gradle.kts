@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.baseproject"
+    namespace = "com.example.c24bank"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.example.baseproject"
+        applicationId = "com.example.c24bank"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
