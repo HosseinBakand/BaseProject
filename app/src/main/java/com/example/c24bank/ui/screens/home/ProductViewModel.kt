@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.c24bank.domain.model.Filter
+import com.example.c24bank.domain.model.Header
 import com.example.c24bank.domain.model.NetworkRequestState
 import com.example.c24bank.domain.model.Product
 import com.example.c24bank.domain.repositories.ProductRepository
@@ -29,16 +30,18 @@ class ProductViewModel @Inject constructor(
 
     val uiState: StateFlow<ProductUiState> =
         combine(
+            productRepository.header,
             productRepository.products,
             _filterState,
             _loadingState
-        ) { products, filter, isLoading ->
+        ) { header, products, filter, isLoading ->
             val filteredProducts = when (filter) {
                 Filter.ALL -> products
                 Filter.AVAILABLE -> products.filter { it.isAvailable }
                 Filter.FAVORITE -> products.filter { it.isFavorite }
             }
             ProductUiState(
+                header = header,
                 products = filteredProducts,
                 requestState = isLoading,
                 filter = filter
@@ -69,6 +72,7 @@ class ProductViewModel @Inject constructor(
 }
 
 data class ProductUiState(
+    val header: Header? = null,
     val products: List<Product> = emptyList(),
     val requestState: NetworkRequestState = NetworkRequestState.Loading,
     val filter: Filter = Filter.ALL

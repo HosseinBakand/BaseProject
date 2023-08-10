@@ -93,8 +93,16 @@ fun ProductListScreen(
             }
         }
 
-        Text(text = "Check24 Shape Compararison")
-        Text(text = "List of geometric products")
+        Text(
+            modifier = Modifier.padding(8.dp),
+            text = uiState.header?.headerTitle?:"",
+            style = MaterialTheme.typography.titleMedium,
+        )
+        Text(
+            modifier = Modifier.padding(8.dp),
+            text = uiState.header?.headerDescription?:"",
+            style = MaterialTheme.typography.titleSmall,
+        )
 
         val pullRefreshState = rememberPullRefreshState(uiState.isLoading, onRefreshRequest)
 
@@ -295,7 +303,7 @@ private fun Preview() {
     C24BankTheme {
         Scaffold {
             ProductListScreen(
-                uiState = ProductUiState(previewProducts),
+                uiState = ProductUiState(products = previewProducts),
                 onRefreshRequest = {},
                 onItemClick = {},
                 onFilterClick = {}
