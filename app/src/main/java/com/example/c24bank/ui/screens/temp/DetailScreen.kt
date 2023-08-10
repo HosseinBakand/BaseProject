@@ -106,7 +106,6 @@ fun DetailScreen(uiState: DetailUiState, onFavoriteClick: () -> Unit) {
                 AnimatedContent(
                     targetState = if (uiState.product.isFavorite) "Vergessen" else "Vormerken"
                 ) { target ->
-                    // Make sure to use `targetCount`, not `count`.
                     Text(
                         text = target, style = MaterialTheme.typography.bodyMedium
                     )

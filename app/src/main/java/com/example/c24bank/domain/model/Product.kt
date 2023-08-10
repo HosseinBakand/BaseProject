@@ -1,6 +1,9 @@
 package com.example.c24bank.domain.model
 
-import com.example.c24bank.data.api.model.PriceResponse
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
+
 
 data class Product(
     val id: Int,
@@ -14,6 +17,7 @@ data class Product(
     val rating: Double,
     val price: Price
 )
+
 
 val previewProducts = listOf(
     Product(
