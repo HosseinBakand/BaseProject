@@ -3,7 +3,7 @@ package com.example.c24bank.di
 import android.content.Context
 import androidx.room.Room
 import com.example.c24bank.data.database.AppDatabase
-import com.example.c24bank.data.database.daos.SampleDao
+import com.example.c24bank.data.database.daos.ProductDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,5 +27,5 @@ object DatabaseModule {
     @Provides
     fun providesCarModelDao(
         database: AppDatabase,
-    ): SampleDao = database.sampleDao()
+    ): ProductDao = database.productDao()
 }
