@@ -30,7 +30,7 @@ class ProductRepositoryImpl @Inject constructor(
     override val products: Flow<List<Product>>
         get() = productDao.getProducts().map { it.map(ProductEntity::toModel) }
 
-    override val header: MutableSharedFlow<Header?>  = MutableSharedFlow()
+    override val header: MutableStateFlow<Header?> = MutableStateFlow(null)
 
     override suspend fun getProducts(): NetworkRequestState = withContext(dispatcher) {
         try {
